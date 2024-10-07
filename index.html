@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>myWeather App</title>
+    <script defer src="main.js"></script></head>
+
+    <body>
+
+        <div class="header-cont">
+            <h1>myWeather App</h1>
+            <div class="right-cont">
+                <button id="units">Celsius (°C)</button>
+                <form class="form-location">
+                    <!-- <label for="location">Location</label> -->
+                    <input type="text" id="location" placeholder="Enter a Location" required>
+                    <button id="submit">Search</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="layout-cont">
+            <div class="weather-cont" style="display: none">
+                <img class="weather-icon">
+                <div class="weather-data"></div>
+            </div>
+
+            <img class="giphy" style = "display: none">
+        </div>
+        
+    </body>
+</html>
