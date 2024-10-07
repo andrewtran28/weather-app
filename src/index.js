@@ -1,9 +1,6 @@
-//function farhenheitToCelsius
-
 import "./styles.css";
 
 const Weather = (function() {
-
 	async function getWeatherData(location) {
     try {
       const response = await fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?key=UKJVE382CNZGQKZZXEV4EYCDQ`, { mode: 'cors' });
@@ -18,28 +15,6 @@ const Weather = (function() {
       return null;
     }
   }
-
-  // async function setWeatherData (location) {
-  //   await getWeatherData(location).then(weather => {
-  //     let data = new Data(
-  //       weather.resolvedAddress,
-  //       weather.description,
-  //       weather.currentConditions.temp,
-  //       weather.currentConditions.feelslike,
-  //       weather.currentConditions.conditions,
-  //       weather.currentConditions.precip,
-  //       weather.currentConditions.sunrise,
-  //       weather.currentConditions.sunset,
-  //       weather.currentConditions.uvindex,
-  //     );
-  //     let poop = weather.address;
-  //     console.log(poop);
-  //     console.log(data.address);
-  //     return data;
-  //   });
-
-  //   return data;
-  // }
 
   function Data(address, desc, temp, feelslike, condition, precip, humidity, sunrise, sunset, uv) {
     this.address = address;
@@ -58,31 +33,34 @@ const Weather = (function() {
 })();
 
 const GIPHY = (() => {
-    function getResponse(){
-        let weatherDesc = response.description;
-        const img = document.querySelector('img');
-        fetch('https://api.giphy.com/v1/gifs/translate?api_key=gQdd7Nh0r9O4mABU6OGEyprphbETt9gR&s=${weatherDesc}', {mode: 'cors'})
+    function getGIF(description){
+        const img = document.querySelector(".giphy");
+        fetch(`https://api.giphy.com/v1/gifs/translate?api_key=gQdd7Nh0r9O4mABU6OGEyprphbETt9gR&s=${description}`, {mode: 'cors'})
           .then(function(response) {
             return response.json();
           })
           .then(function(response) {
-            console.log(response.data.images.original.url);
+            img.style.display="";
             img.src = response.data.images.original.url;
           });
     }
 
-    return { getResponse }
+    return { getGIF }
 })();
 
 const WeatherApp = (() => {
-  async function renderWeather (location) {
+  let currentLocation = "";
+  let data;
+
+  async function getWeather(location) {
+    console.log(location);
     const weather = await Weather.getWeatherData(location);
 
     if (weather === null) {
       return false
     }
 
-    let data = new Weather.Data(
+    data = new Weather.Data(
       weather.resolvedAddress,
       weather.description,
       weather.currentConditions.temp,
@@ -95,23 +73,79 @@ const WeatherApp = (() => {
       weather.currentConditions.uvindex,
     );
 
-    console.log(data);
+    if (btn_units.textContent === "Fahrenheit (°F)") {
+      renderWeather("fahrenheit");
+    }
+    else if (btn_units.textContent === "Celsius (°C)") {
+      renderWeather("celsius");
+    }
 
-    const container = document.querySelector(".weather-cont");
-    container.style.display = "";
-    container.textContent = "";
-
-    container.innerHTML = `
-            <div class="location">${data.address}</div>
-            <div class="condition">${data.condition}</div>
-            <div class="temp">Temperature: ${data.temp}F</div> <div class="feelslike">(Feels Like: ${data.feelslike}F)</div>
-            <div class="humidity">Humidity: ${data.humidity}%</div>
-            <div class="uv-index">UV Index: ${data.uv}</div>
-            <div class="sunrise">Sunrise: ${data.sunrise}</div> <div class="sunset">Sunset: ${data.sunset}</div>
-    `;
+    const giphy = await GIPHY.getGIF(data.condition);
   }
 
-  renderWeather("Ottawa");
+  function renderWeather(units) {
+    const container = document.querySelector(".weather-cont");
+    container.innerHTML="";
+    container.style.display = "";
 
+    let symbol = "F";
+    if (units === "celsius") {
+      let temp_Celsius = Math.round(((data.temp - 32)*(5/9)) * 10) / 10;
+      let feelslike_Celsius = Math.round(((data.feelslike - 32)*(5/9)) * 10) / 10;
+      symbol = "C";
+
+      container.innerHTML = `
+      <div class="address">${data.address}</div>
+      <div class="condition">${data.condition}</div>
+      <div class="temp">Temperature: ${temp_Celsius} °${symbol}</div>
+      <div class="feelslike">(Feels Like: ${feelslike_Celsius} °${symbol})</div>
+      <div class="humidity">Humidity: ${data.humidity}%</div>
+      <div class="uv-index">UV Index: ${data.uv}</div>
+      <div class="sunrise">Sunrise: ${data.sunrise}</div>
+      <div class="sunset">Sunset: ${data.sunset}</div>
+      `;
+    }
+
+    else if (units === "fahrenheit") {
+      symbol = "F";
+
+      container.innerHTML = `
+        <div class="address">${data.address}</div>
+        <div class="condition">${data.condition}</div>
+        <div class="temp">Temperature: ${data.temp} °${symbol}</div>
+        <div class="feelslike">(Feels Like: ${data.feelslike} °${symbol})</div>
+        <div class="humidity">Humidity: ${data.humidity}%</div>
+        <div class="uv-index">UV Index: ${data.uv}</div>
+        <div class="sunrise">Sunrise: ${data.sunrise}</div>
+        <div class="sunset">Sunset: ${data.sunset}</div>
+      `;
+    }
+  }
+
+  const form = document.querySelector("form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const location_input = document.getElementById("location").value;
+
+    if (location_input != "") {
+      currentLocation = location_input;
+      getWeather(currentLocation);
+    }
+  });
+
+  const btn_units = document.getElementById("units");
+  btn_units.addEventListener("click", () => {
+    if (currentLocation != "") {
+      if (btn_units.textContent === "Fahrenheit (°F)") {
+        btn_units.textContent = "Celsius (°C)";
+        renderWeather("celsius");
+      } 
+      else if (btn_units.textContent === "Celsius (°C)") {
+        btn_units.textContent = "Fahrenheit (°F)";
+        renderWeather("fahrenheit");
+      }
+    }
+   });
+
+  return { renderWeather }
 }) (Weather, GIPHY);
-

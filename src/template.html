@@ -3,22 +3,26 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>My Weather App</title>
+        <title>myWeather App</title>
     </head>
 
     <body>
-        <h1>Weather</h1>
-        
-        <form>
-            <label>City</label>
-            <input type="text" id="location" placeholder="Enter a City"></input>
-            <button>Search</button>
-        </form>
 
-        <div class="weather-cont" style="display: none" >
+        <div class="header-cont">
+            <h1>myWeather App</h1>
+            <button id="units">Fahrenheit (°F)</button>
+            <form class="form-location">
+                <label for="location">Location</label>
+                <input type="text" id="location" placeholder="Enter a Location" required>
+                <button id="submit">Search</button>
+            </form>
+
         </div>
-        <!-- <img src="#"> -->
-        
 
+        <div class="layout-cont">
+            <div class="weather-cont" style="display: none"></div>
+            <img class="giphy" style = "display: none">
+        </div>
+        
     </body>
 </html>
