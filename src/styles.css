@@ -14,18 +14,35 @@ body {
 }
 
 h1 {
-  margin: 10px;
+  margin: 30px;
 }
 
 .right-cont {
   display: flex;
   align-items: center;
+  margin: 10px;
+}
+
+#units {
+  font-size: 1.25rem;
+  width: 200px;
+  padding: 20px;
+  margin: 20px;
+  border: 2px solid #16325B;
+  border-radius: 10px;
+  background-color: #ffd760;;
+}
+
+#units:hover {
+  background-color: #b99c44;;
+}
+
+#submit {
+  padding: 15px;
 }
 
 .layout-cont {
-    /* border: 1px solid red; */
     display: flex;
-    /* flex-direction: column; */
     justify-content: center;
     align-items: center;
     margin: 20px;
@@ -45,15 +62,25 @@ h1 {
 input {
   padding: 10px;
   margin: 10px;
+  font-size: 1.25rem;
 }
 
 .weather-cont {
-    border: 2px solid #16325B;
-    border-radius: 10px;
-    padding: 30px;
-    margin: 30px;
-    background: #fdf9ec;
+  border: 1px solid red;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #16325B;
+  border-radius: 10px;
+  background: #fdf9ec;
+  padding: 30px;
+  margin: 30px;
+}
 
+.weather-icon {
+  height: 50px;
+  margin-right: 50px;
 }
 
 .address {

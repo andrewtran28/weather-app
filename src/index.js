@@ -1,4 +1,23 @@
 import "./styles.css";
+import clearday from "./img/clearday.png";
+import clearnight from "./img/clearnight.png";
+import cloudy from "./img/cloudy.png";
+import fog from "./img/fog.png";
+import hail from "./img/hail.png";
+import partlycloudyday from "./img/partlycloudyday.png";
+import partlycloudynight from "./img/partlycloudynight.png";
+import rain from "./img/rain.png";
+import rainsnow from "./img/rainsnow.png";
+import snow from "./img/snow.png";
+import snowshowersday from "./img/snowshowersday.png";
+import snowshowersnight from "./img/snowshowersnight.png";
+import thunderrain from "./img/thunderrain.png";
+import thundershowersday from "./img/thundershowersday.png";
+import thundershowersnight from "./img/thundershowersnight.png";
+import showersday from "./img/showersday.png";
+import showersnight from "./img/showersnight.png";
+import wind from "./img/wind.png";
+
 
 const Weather = (function() {
 	async function getWeatherData(location) {
@@ -16,7 +35,7 @@ const Weather = (function() {
     }
   }
 
-  function Data(address, desc, temp, feelslike, condition, precip, humidity, sunrise, sunset, uv) {
+  function Data(address, desc, temp, feelslike, condition, precip, humidity, sunrise, sunset, uv, icon) {
     this.address = address;
     this.desc = desc;
     this.temp = temp;
@@ -27,6 +46,7 @@ const Weather = (function() {
     this.sunrise = sunrise;
     this.sunset = sunset;
     this.uv = uv;
+    this.icon = icon;
   }
 
   return { getWeatherData, Data };
@@ -71,6 +91,7 @@ const WeatherApp = (() => {
       weather.currentConditions.sunrise,
       weather.currentConditions.sunset,
       weather.currentConditions.uvindex,
+      weather.currentConditions.icon,
     );
 
     if (btn_units.textContent === "Fahrenheit (°F)") {
@@ -85,8 +106,17 @@ const WeatherApp = (() => {
 
   function renderWeather(units) {
     const container = document.querySelector(".weather-cont");
+    const weatherData = document.querySelector(".weather-data");
+    const weatherIcon = document.querySelector(".weather-icon");
+
     container.innerHTML="";
     container.style.display = "";
+    container.appendChild(weatherIcon);
+    container.appendChild(weatherData);
+
+    let icon = data.icon.replace(/-/g, "");
+    console.log(icon);
+    weatherIcon.src = icons()[`${icon}`];
 
     let symbol = "F";
     if (units === "celsius") {
@@ -94,7 +124,7 @@ const WeatherApp = (() => {
       let feelslike_Celsius = Math.round(((data.feelslike - 32)*(5/9)) * 10) / 10;
       symbol = "C";
 
-      container.innerHTML = `
+      weatherData.innerHTML = `
       <div class="address">${data.address}</div>
       <div class="condition">${data.condition}</div>
       <div class="temp">Temperature: ${temp_Celsius} °${symbol}</div>
@@ -109,7 +139,7 @@ const WeatherApp = (() => {
     else if (units === "fahrenheit") {
       symbol = "F";
 
-      container.innerHTML = `
+      weatherData.innerHTML = `
         <div class="address">${data.address}</div>
         <div class="condition">${data.condition}</div>
         <div class="temp">Temperature: ${data.temp} °${symbol}</div>
@@ -122,6 +152,29 @@ const WeatherApp = (() => {
     }
   }
 
+  function icons() {
+    return {
+      "clear-day": clearday,
+      "clear-night": clearnight,
+      cloudy: cloudy,
+      fog: fog,
+      hail: hail,
+      wind: wind,
+      rain: rain,
+      "rain-snow": rainsnow,
+      snow: snow,
+      "snow-showers-day": snowshowersday,
+      "snow-showers-night": snowshowersnight,
+      "thunder-rain": thunderrain,
+      "thunder-showers-day": thundershowersday,
+      "thunder-showers-night": thundershowersnight,
+      "showers-day": showersday,
+      "showers-night": showersnight,
+      "partlycloudyday": partlycloudyday,
+      "partly-cloudy-night": partlycloudynight,
+    };
+  }
+
   const form = document.querySelector("form");
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -131,23 +184,24 @@ const WeatherApp = (() => {
       currentLocation = location_input;
       getWeather(currentLocation);
     }
+
+    form.reset();
   });
 
   const btn_units = document.getElementById("units");
   btn_units.addEventListener("click", () => {
-
-      if (btn_units.textContent === "Fahrenheit (°F)") {
-        if (currentLocation != "") {
-          btn_units.textContent = "Celsius (°C)";
-          renderWeather("celsius");
-        }
-      } 
-      else if (btn_units.textContent === "Celsius (°C)") {
-        if (currentLocation != "") {
-          btn_units.textContent = "Fahrenheit (°F)";
-          renderWeather("fahrenheit");
-        }
+    if (btn_units.textContent === "Fahrenheit (°F)") {
+      btn_units.textContent = "Celsius (°C)";
+      if (currentLocation != "") {
+        renderWeather("celsius");
       }
+    } 
+    else if (btn_units.textContent === "Celsius (°C)") {
+      btn_units.textContent = "Fahrenheit (°F)";
+      if (currentLocation != "") {
+        renderWeather("fahrenheit");
+      }
+    }
    });
 
   return { renderWeather }
