@@ -13,30 +13,47 @@ body {
     background: #ff8f0e;
 }
 
+h1 {
+  margin: 10px;
+}
+
+.right-cont {
+  display: flex;
+  align-items: center;
+}
+
 .layout-cont {
     /* border: 1px solid red; */
     display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
+    /* flex-direction: column; */
+    justify-content: center;
     align-items: center;
+    margin: 20px;
 }
 
 .form-location {
     border: 2px solid #16325B;
     border-radius: 10px;
     display: flex;
-    padding: 20px;
     justify-content: space-between;
+    align-items: center;
+    padding: 20px;
     background: #ffd760;
-    /* color: white; */
-    height: 80%
+    height: 80%;
+}
+
+input {
+  padding: 10px;
+  margin: 10px;
 }
 
 .weather-cont {
     border: 2px solid #16325B;
     border-radius: 10px;
     padding: 30px;
+    margin: 30px;
     background: #fdf9ec;
+
 }
 
 .address {

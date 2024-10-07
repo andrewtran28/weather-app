@@ -135,16 +135,19 @@ const WeatherApp = (() => {
 
   const btn_units = document.getElementById("units");
   btn_units.addEventListener("click", () => {
-    if (currentLocation != "") {
+
       if (btn_units.textContent === "Fahrenheit (°F)") {
-        btn_units.textContent = "Celsius (°C)";
-        renderWeather("celsius");
+        if (currentLocation != "") {
+          btn_units.textContent = "Celsius (°C)";
+          renderWeather("celsius");
+        }
       } 
       else if (btn_units.textContent === "Celsius (°C)") {
-        btn_units.textContent = "Fahrenheit (°F)";
-        renderWeather("fahrenheit");
+        if (currentLocation != "") {
+          btn_units.textContent = "Fahrenheit (°F)";
+          renderWeather("fahrenheit");
+        }
       }
-    }
    });
 
   return { renderWeather }
