@@ -55,11 +55,14 @@ const Weather = (function() {
 const GIPHY = (() => {
     function getGIF(description){
         const img = document.querySelector(".giphy");
+        const cont_GIF = document.querySelector(".gif-cont");
         fetch(`https://api.giphy.com/v1/gifs/translate?api_key=gQdd7Nh0r9O4mABU6OGEyprphbETt9gR&s=${description}`, {mode: 'cors'})
           .then(function(response) {
             return response.json();
           })
           .then(function(response) {
+            console.log(description + ": " + response.data.images.original.url);
+            cont_GIF.style="";
             img.style.display="";
             img.src = response.data.images.original.url;
           });
@@ -115,7 +118,6 @@ const WeatherApp = (() => {
     container.appendChild(weatherData);
 
     let icon = data.icon.replace(/-/g, "");
-    console.log(icon);
     weatherIcon.src = icons()[`${icon}`];
 
     let symbol = "F";
@@ -154,24 +156,24 @@ const WeatherApp = (() => {
 
   function icons() {
     return {
-      "clear-day": clearday,
-      "clear-night": clearnight,
+      "clearday": clearday,
+      "clearnight": clearnight,
       cloudy: cloudy,
       fog: fog,
       hail: hail,
       wind: wind,
       rain: rain,
-      "rain-snow": rainsnow,
+      "rainsnow": rainsnow,
       snow: snow,
-      "snow-showers-day": snowshowersday,
-      "snow-showers-night": snowshowersnight,
-      "thunder-rain": thunderrain,
-      "thunder-showers-day": thundershowersday,
-      "thunder-showers-night": thundershowersnight,
-      "showers-day": showersday,
-      "showers-night": showersnight,
+      "snowshowersday": snowshowersday,
+      "snowshowersnight": snowshowersnight,
+      "thunderrain": thunderrain,
+      "thundershowersday": thundershowersday,
+      "thundershowersnight": thundershowersnight,
+      "showersday": showersday,
+      "showersnight": showersnight,
       "partlycloudyday": partlycloudyday,
-      "partly-cloudy-night": partlycloudynight,
+      "partlycloudynight": partlycloudynight,
     };
   }
 
